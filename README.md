@@ -1,6 +1,5 @@
 # Installation
 
-- sail artisan storage:link
-- sail artisan migrate
+- sail artisan shop:install
 
 # Deploy

@@ -11,7 +11,8 @@
         "laravel/sail": "^1.29",
         "laravel/sanctum": "^3.2",
         "laravel/telescope": "^5.0",
-        "laravel/tinker": "^2.8"
+        "laravel/tinker": "^2.8",
+        "sentry/sentry-laravel": "^4.5"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.13",

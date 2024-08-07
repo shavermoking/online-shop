@@ -2,10 +2,13 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SignInFormRequest extends FormRequest
 {
+
+    use HasFactory;
     public function authorize(): bool
     {
         return auth()->guest();

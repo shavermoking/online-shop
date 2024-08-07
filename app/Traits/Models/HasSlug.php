@@ -15,15 +15,14 @@ trait HasSlug
 
     protected function makeSlug()
     {
-        if (!$this->{$this->slugColumn()}){
+        if (!$this->{$this->slugColumn()}) {
             $slug = $this->slugUnique(
                 str($this->{$this->slugFrom()})
                     ->slug()
                     ->value()
             );
+            $this->{$this->slugColumn()} = $slug;
         }
-
-        $this->{$this->slugColumn()} = $this->{$this->slugColumn} ?? $slug;
     }
 
     protected function slugColumn(): string
@@ -39,25 +38,22 @@ trait HasSlug
     private function slugUnique(string $slug): string
     {
         $originalSlug = $slug;
-
         $i = 0;
 
         while ($this->isSlugExists($slug)) {
             $i++;
-            $slug = $originalSlug. '=' . $i;
+            $slug = $originalSlug . '-' . $i;
         }
 
         return $slug;
-
     }
 
     private function isSlugExists(string $slug): bool
     {
-        $query = $this->newQuery()
-            ->where(self::slugColumn(), $slug)
+        return $this->newQuery()
+            ->where($this->slugColumn(), $slug)
             ->where($this->getKeyName(), '!=', $this->getKey())
-            ->withoutGlobalScopes();
-
-        return $query->exists();
+            ->withoutGlobalScopes()
+            ->exists();
     }
 }

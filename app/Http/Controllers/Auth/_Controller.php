@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ForgotPasswordFormRequest;
 use App\Http\Requests\ResetPasswordFormRequest;
 use App\Http\Requests\SignInFormRequest;
 use App\Http\Requests\SignUpFormRequest;
-use App\Models\User;
+use Domain\Auth\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\View\Factory;
@@ -16,19 +17,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Password;
 use Laravel\Socialite\Facades\Socialite;
 
-class AuthController extends Controller
+class _Controller extends Controller
 {
-    public function index(): Factory|Application|View|RedirectResponse
-    {
 
-        return view('auth.index');
-    }
-
-    public function signUp(): Factory|Application|View
-    {
-
-        return view('auth.sign-up');
-    }
 
     public function forgot(): Factory|Application|View
     {
@@ -42,48 +33,10 @@ class AuthController extends Controller
         ]);
     }
 
-    public function signIn(SignInFormRequest $request): ?RedirectResponse
-    {
-
-        if (!auth()->attempt($request->validated())){
-            return back()->withErrors([
-                'email' => 'The provided credentials do not match our records.'
-            ])->onlyInput('email');
-        }
-
-        $request->session()->regenerate();
-
-        return redirect()
-            ->intended(route('home'));
-    }
-
-    public function store(SignUpFormRequest $request)
-    {
-        $user = User::query()->create([
-            'name' => $request->get('name'),
-            'email' => $request->get('email'),
-            'password' => bcrypt($request->get('password'))
-        ]);
 
 
-        event(new Registered($user));
-        auth()->login($user);
 
-        return redirect()
-            ->intended(route('home'));
-    }
 
-    public function logOut(): RedirectResponse
-    {
-        auth()->logout();
-
-        \request()->session()->invalidate();
-
-        \request()->session()->regenerateToken();
-
-        return redirect()
-            ->intended(route('home'));
-    }
 
     public function forgotPassword(ForgotPasswordFormRequest $request): RedirectResponse
     {

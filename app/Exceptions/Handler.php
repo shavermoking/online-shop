@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use DomainException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Sentry\Laravel\Integration;
 use Throwable;
@@ -44,6 +45,12 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
             Integration::captureUnhandledException($e);
+        });
+
+        $this->renderable(function (DomainException $e) {
+            flash()->alert($e->getMessage());
+
+            return back();
         });
     }
 }

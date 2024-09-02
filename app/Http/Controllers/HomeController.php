@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function __invoke(): Factory|Application|View
+    public function __invoke(): View
     {
         $categories = Category::query()
             ->homePage()
@@ -28,7 +28,7 @@ class HomeController extends Controller
 
         return view('index', compact([
             'categories',
-            'products',!
+            'products',
             'brands'
         ]));
     }

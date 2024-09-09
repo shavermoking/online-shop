@@ -20,7 +20,6 @@ final class FakerImageProvider extends Base
             Storage::path($storageDir),
             false // Возвращает только имя файла
         );
-
         // Возвращаем относительный путь, чтобы хранить его в базе данных
         return '/storage/' . trim($storageDir, '/') . '/' . $file;
     }

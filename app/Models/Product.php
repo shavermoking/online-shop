@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Casts\SlugCast;
 use App\Traits\Models\HasSlug;
+use App\Traits\Models\HasThumbnail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,15 +21,29 @@ class Product extends Model
 {
     use HasFactory;
     use HasSlug;
+    use HasThumbnail;
 
     protected $fillable = [
         'title',
         'thumbnail',
         'slug',
         'price',
-        'brand_id'
+        'brand_id',
+        'on_home_page',
+        'sorting'
     ];
 
+    protected function thumbnailDir(): string
+    {
+        return 'products';
+    }
+
+    public function scopeHomePage(Builder $query): void
+    {
+        $query->where('on_home_page', true)
+            ->orderBy('sorting')
+            ->limit(6);
+    }
 
     public function brand(): BelongsTo
     {
@@ -38,4 +54,6 @@ class Product extends Model
     {
         return $this->belongsToMany(Category::class);
     }
+
+
 }

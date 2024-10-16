@@ -28,6 +28,11 @@ class Price implements \Stringable
         }
     }
 
+    public function raw(): int
+    {
+        return $this->value;
+    }
+
     public function value(): float|int
     {
         return $this->value / $this->precision;
@@ -45,7 +50,7 @@ class Price implements \Stringable
 
     public function __toString()
     {
-        return  number_format($this->value(), 2, ',', ' ')
+        return  number_format($this->value(), 0, ',', ' ')
             . ' ' . $this->symbol();
     }
 }

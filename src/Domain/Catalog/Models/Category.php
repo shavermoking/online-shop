@@ -12,8 +12,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Support\Traits\Models\HasSlug;
 
 /**
- * @property $title
- * @property $slug
+ * @property int $id
+ * @property string $title
+ * @property string $slug
  */
 
 /**

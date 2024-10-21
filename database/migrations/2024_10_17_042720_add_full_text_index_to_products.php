@@ -13,7 +13,10 @@ return new class extends Migration
             $table->text('text')
                 ->nullable();
 
-            $table->fullText(['title', 'text']);
+            if (!$this->isSqlite()){
+                $table->fullText(['title', 'text']);
+            }
+
         });
     }
 
@@ -25,5 +28,14 @@ return new class extends Migration
                 //
             });
         }
+    }
+
+
+    private function isSqlite(): bool
+    {
+        return 'sqlite' === Schema::connection($this->getConnection())
+            ->getConnection()
+            ->getPdo()
+            ->getAttribute(PDO::ATTR_DRIVER_NAME);
     }
 };

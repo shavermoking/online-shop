@@ -32,18 +32,14 @@
         <h2 class="text-lg lg:text-[42px] font-black">Каталог товаров</h2>
 
         <div class="flex flex-col lg:flex-row gap-12 lg:gap-6 2xl:gap-8 mt-8">
-
             <!-- Filters -->
             <aside class="basis-2/5 xl:basis-1/4">
                 <form action="{{ route('catalog', $category) }}" class="overflow-auto max-h-[320px] lg:max-h-[100%] space-y-10 p-6 2xl:p-8 rounded-2xl bg-card">
-                    <!-- Filter item -->
                     <input type="hidden" name="sort" value="{{ request('sort') }}">
+
                     @foreach(filters() as $filter)
                         {!! $filter !!}
                     @endforeach
-
-                    <!-- Filter item -->
-
 
                     <div>
                         <button type="submit" class="w-full !h-16 btn btn-pink">Поиск</button>
@@ -82,20 +78,32 @@
                             Найдено: {{ $products->total() }} товаров
                         </div>
                     </div>
-                    <div x-data="{}" class="flex flex-col sm:flex-row sm:items-center gap-3">
+                    <div x-data="{sort: '{{ filter_url($category, ['sort' => request('sort')]) }}'}" class="flex flex-col sm:flex-row sm:items-center gap-3">
                         <span class="text-body text-xxs sm:text-xs">Сортировать по</span>
-                        <form x-ref="sortForm" action="{{ route('catalog', $category) }}">
-                            <select
-                                name="sort"
-                                x-on:change="$refs.sortForm.submit()"
-                                class="form-select w-full h-12 px-4 rounded-lg border border-body/10 focus:border-pink focus:shadow-[0_0_0_3px_#EC4176] bg-white/5 text-white text-xxs sm:text-xs shadow-transparent outline-0 transition">
 
-                                <option value="" class="text-dark">по умолчанию</option>
-                                <option @selected(request('sort') === 'price') value="price" class="text-dark">от дешевых к дорогим</option>
-                                <option @selected(request('sort') === '-price') value="-price" class="text-dark">от дорогих к дешевым</option>
-                                <option @selected(request('sort') === 'title') value="title" class="text-dark">наименованию</option>
-                            </select>
-                        </form>
+                        <select
+                            name="sort"
+                            x-model="sort"
+                            x-on:change="window.location = sort"
+                            class="form-select w-full h-12 px-4 rounded-lg border border-body/10 focus:border-pink focus:shadow-[0_0_0_3px_#EC4176] bg-white/5 text-white text-xxs sm:text-xs shadow-transparent outline-0 transition">
+
+                            <option value="{{ filter_url($category, ['sort' => '']) }}" class="text-dark">по умолчанию</option>
+
+                            <option value="{{ filter_url($category, ['sort' => 'price']) }}"
+                                    class="text-dark">
+                                от дешевых к дорогим
+                            </option>
+
+                            <option value="{{ filter_url($category, ['sort' => '-price']) }}"
+                                    class="text-dark">
+                                от дорогих к дешевым
+                            </option>
+
+                            <option value="{{ filter_url($category, ['sort' => 'title']) }}"
+                                    class="text-dark">
+                                наименованию
+                            </option>
+                        </select>
                     </div>
                 </div>
 
